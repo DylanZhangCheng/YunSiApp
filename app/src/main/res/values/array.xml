@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sex_array">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+
+    <string-array name="class_array">
+        <item>小学</item>
+        <item>初一 上学期</item>
+        <item>初一 下学期</item>
+        <item>初二 上学期</item>
+        <item>初二 下学期</item>
+        <item>初三 上学期</item>
+        <item>初三 下学期</item>
+    </string-array>
+</resources>
