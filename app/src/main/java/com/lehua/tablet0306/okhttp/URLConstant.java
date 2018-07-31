@@ -4,6 +4,7 @@ public class URLConstant {
 
     // 注册信息Url
     public static final String URL_REGISTER = "one/user/register.template";
+    public static final String URL_REGISTER_QUESTION = "one/user/detailMsg.template";
     //登陆验证表
     public static final String URL_LOGIN = "one/user/login.template";
 

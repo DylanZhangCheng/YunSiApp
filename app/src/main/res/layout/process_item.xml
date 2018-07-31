@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="750dp"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_bg"
+        android:elevation="3dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:text="语文："
+        android:textColor="@color/white"
+        android:textSize="22sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:text="自我评定，综合学习程度百分比%"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_process_line"
+            android:layout_width="620dp"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="540dp"
+                android:background="@drawable/process_line_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="100"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="480dp"
+                android:background="@drawable/process_line_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="90"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="420dp"
+                android:background="@drawable/process_line_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="80"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="360dp"
+                android:background="@drawable/process_line_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="70"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="300dp"
+                android:background="@drawable/process_line_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="60"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="240dp"
+                android:background="@drawable/process_line_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="50"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="180dp"
+                android:background="@drawable/process_line_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="40"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="120dp"
+                android:background="@drawable/process_line_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="30"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="60dp"
+                android:background="@drawable/process_line_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="20"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/process_line_bg"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="10"
+                android:textSize="20sp" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

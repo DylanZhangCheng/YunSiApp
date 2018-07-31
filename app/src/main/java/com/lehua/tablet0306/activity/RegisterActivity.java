@@ -157,12 +157,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.btn_register:
-//                if (checkInputLegal()) {
-//                    attemptToRegister();
-//                }
-                Intent intent = new Intent(getApplicationContext(), RegisterQuestionActivity.class);  //同时跳转到“注册成功界面”
-                //fix: 跳转至问卷
-                startActivity(intent);
+                if (checkInputLegal()) {
+                    attemptToRegister();
+                }
+
+//                //test
+//                User user = new User();
+//                user.setAccount("18979414939");
+//                user.setSchoolClass(schoolClass);
+//                Intent intent = new Intent(getApplicationContext(), RegisterQuestionActivity.class);  //同时跳转到“注册成功界面”
+//                intent.putExtra("user", user);
+//                //fix: 跳转至问卷
+//                startActivity(intent);
                 break;
             default:
                 break;
@@ -216,6 +222,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     intent.putExtra("user", user);
                     //fix: 跳转至问卷
                     startActivity(intent);
+                    finish();
                 } else {
                     ViseLog.d("注册失败: " + response.optString("error_info"));
                     MethodUtils.showToast(getApplicationContext(), "注册失败: " + response.optString("error_info"));

@@ -30,6 +30,16 @@
     <string name="no">否</string>
     <string name="nation">民族</string>
 
+    <!--问卷界面-->
+    <string name="primarySchool">小学</string>
+    <string name="middleSchool">初中</string>
+    <string name="bookVersion">教材版本：</string>
+    <string name="hobby">特长爱好：</string>
+    <string name="studyStatus">学习状态：</string>
+    <string name="question_remind">学科强弱勾选：只有认真填写学习程度，才能获得精准辅导</string>
+    <string name="serviceTerm">我已经阅读并同意相关服务条款和隐私政策</string>
+    <string name="finish">填写完成</string>
+
     <!--常用按钮及其状态-->
 
     <string name="register">注册</string>

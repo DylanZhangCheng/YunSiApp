@@ -85,7 +85,10 @@
         <activity
             android:name=".activity.PushDetailActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".activity.RegisterQuestionActivity"></activity>
+        <activity
+            android:name=".activity.RegisterQuestionActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.RadarActivity"></activity>
     </application>
 
 </manifest>

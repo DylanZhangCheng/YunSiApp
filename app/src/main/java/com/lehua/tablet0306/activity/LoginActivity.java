@@ -30,6 +30,8 @@ import com.vise.log.ViseLog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Pattern;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     LinearLayout ll_back;
@@ -198,10 +200,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             MethodUtils.showToast(getApplicationContext(), "账号不能为空");
             return false;
         }
-//        if (!Pattern.matches("^1[3|4|5|8][0-9]\\d{8}$", account)) {
-//            MethodUtils.showToast(getApplicationContext(), "账号不符合电话号码格式，请输入正确的手机号码");
-//            return false;
-//        }
+        if (!Pattern.matches("^1[3|4|5|8][0-9]\\d{8}$", account)) {
+            MethodUtils.showToast(getApplicationContext(), "账号不符合电话号码格式，请输入正确的手机号码");
+            return false;
+        }
         String pwd = et_pwd.getText().toString().trim();
         if (TextUtils.isEmpty(pwd)) {
             MethodUtils.showToast(getApplicationContext(), "密码不能为空");
