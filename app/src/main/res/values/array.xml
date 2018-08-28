@@ -6,7 +6,12 @@
     </string-array>
 
     <string-array name="class_array">
-        <item>小学</item>
+        <item>小学 一年级</item>
+        <item>小学 二年级</item>
+        <item>小学 三年级</item>
+        <item>小学 四年级</item>
+        <item>小学 五年级</item>
+        <item>小学 六年级</item>
         <item>初一 上学期</item>
         <item>初一 下学期</item>
         <item>初二 上学期</item>

@@ -30,6 +30,14 @@
     <string name="no">否</string>
     <string name="nation">民族</string>
 
+    <!--个人中心-->
+    <string name="ct_user">个人中心</string>
+    <string name="ct_name">姓名:</string>
+    <string name="ct_age">年龄:</string>
+    <string name="ct_grade">年级:</string>
+    <string name="alter">修改</string>
+    <string name="radar_change">雷达图</string>>
+
     <!--问卷界面-->
     <string name="primarySchool">小学</string>
     <string name="middleSchool">初中</string>

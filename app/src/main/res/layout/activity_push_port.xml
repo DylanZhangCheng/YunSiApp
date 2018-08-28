@@ -22,33 +22,33 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="3dp"
-                    android:gravity="center"
-                    android:text="@string/app_name"
-                    android:textColor="#2477B8"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="#2477B8"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:src="@drawable/back_blue" />
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/back_blue" />
 
-                <TextView
-                    android:id="@+id/ll_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/back"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/ll_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/back"
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -72,8 +72,8 @@
                 android:id="@+id/layout_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="25dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="7dp"
                 >
@@ -96,7 +96,7 @@
                 android:layout_toRightOf="@+id/layout_image"
                 android:layout_marginTop="23dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginRight="70dp"/>
+                android:layout_marginRight="30dp"/>
 
             <TextView
                 android:id="@+id/ct_age"
@@ -109,7 +109,7 @@
                 android:layout_toRightOf="@+id/ct_name"
                 android:layout_marginTop="23dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginRight="70dp"/>
+                android:layout_marginRight="30dp"/>
 
             <TextView
                 android:id="@+id/ct_class"
@@ -122,9 +122,10 @@
                 android:layout_toRightOf="@+id/ct_age"
                 android:layout_marginTop="23dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginRight="70dp"/>
+                android:layout_marginRight="30dp"/>
 
             <ImageView
+                android:id="@+id/qr_code"
                 android:adjustViewBounds="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -265,7 +266,8 @@
             android:layout_centerInParent="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true">
 
             <TextView
                 android:id="@+id/tv_pre"
@@ -389,7 +391,6 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="2dp"
-                android:singleLine="true"
                 android:maxLength="5"
                 android:digits="0123456789"
                 android:text="      "
@@ -426,18 +427,17 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxHeight="100dp"
-            android:maxWidth="50dp"
-            android:layout_alignParentRight="true">
+            android:layout_below="@+id/pages"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:adjustViewBounds="true"
-                android:maxHeight="50dp"
+                android:maxHeight="30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/logo_land" />
+                android:src="@drawable/logo_port" />
         </LinearLayout>
     </RelativeLayout>
-
 
 </LinearLayout>

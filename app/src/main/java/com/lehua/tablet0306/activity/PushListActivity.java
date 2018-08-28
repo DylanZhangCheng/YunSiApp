@@ -4,17 +4,24 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+
 import android.view.View;
 import android.view.Window;
+
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,28 +30,37 @@ import com.lehua.tablet0306.R;
 import com.lehua.tablet0306.bean.User;
 import com.lehua.tablet0306.okhttp.HttpRequest;
 import com.lehua.tablet0306.okhttp.URLConstant;
+import com.lehua.tablet0306.utils.CircleImageView;
 import com.lehua.tablet0306.utils.MethodUtils;
 import com.lehua.tablet0306.utils.PushAdapter;
 import com.lehua.tablet0306.utils.PushMessage;
 import com.lehua.tablet0306.utils.SpHelp;
+import com.lehua.tablet0306.utils.UserImg;
 import com.vise.log.ViseLog;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 public class PushListActivity extends AppCompatActivity implements View.OnClickListener {
-    private LinearLayout ll_back;
+    private TextView ll_back;
     private TextView tv_my_collect;
     private ListView pushList;           //专家建议ListView
+    private CircleImageView center_image;//头像
     private TextView tv_pre, tv_1, tv_2, tv_3, tv_last, tv_ellipsis, tv_next, tv_jump;
     private EditText et_target_page;
+
+    private TextView ct_name;
+    private TextView ct_age;
+    private TextView ct_class;
 
     private PushAdapter pushAdapter;
     private ArrayList<PushMessage> messageList;
@@ -56,22 +72,44 @@ public class PushListActivity extends AppCompatActivity implements View.OnClickL
     private boolean flag = FLAG_HISTORY;    //代表当前页面是在历史记录页面还是 收藏界面
     private int itemCount, pageCount;
 
+    private int request = 1;//判断请求某一页面是否成功，防止多次重复按钮事件
+    private static final int MIN_DELAY_TIME= 1000;  // 两次点击间隔不能少于1000ms
+    private static long lastClickTime;
+
+    private User user;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_push);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_push);
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setContentView(R.layout.activity_push_port);
+        }
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+
         initView();
+
         initListener();
         taskGetPush();
     }
 
     private void initView() {
-        ll_back = (LinearLayout) findViewById(R.id.ll_back);
+        ll_back = (TextView) findViewById(R.id.ll_back);
         tv_my_collect = (TextView) findViewById(R.id.tv_my_collect);
         pushList = (ListView) findViewById(R.id.list);
+        center_image = (CircleImageView) findViewById(R.id.center_image);
+
+        ct_name = (TextView) findViewById(R.id.ct_name);
+        ct_age = (TextView) findViewById(R.id.ct_age);
+        ct_class = (TextView) findViewById(R.id.ct_class);
 
         tv_pre = (TextView) findViewById(R.id.tv_pre);
         tv_1 = (TextView) findViewById(R.id.tv_1);
@@ -105,6 +143,7 @@ public class PushListActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(intent);
             }
         });
+        center_image.setOnClickListener(this);
 
         tv_pre.setOnClickListener(this);
         tv_1.setOnClickListener(this);
@@ -116,10 +155,20 @@ public class PushListActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initData() {
+
         messageList = new ArrayList<>();
         pushAdapter = new PushAdapter(messageList, PushListActivity.this);
         pushList.setAdapter(pushAdapter);
+
+        User user = (User) SpHelp.getObject(SpHelp.USER_ENTITY);
+        ct_name.setText("姓名:"+user.getName());
+        ct_age.setText("年龄:"+String.valueOf(user.getAge()));
+        ct_class.setText("年级:"+user.getSchoolClass());
+
         initPushHistory();
+
+        UserImg userImg = new UserImg();
+        userImg.loadUserImg(user.getAccount(),center_image);
     }
 
     private void initPushHistory() {
@@ -149,19 +198,21 @@ public class PushListActivity extends AppCompatActivity implements View.OnClickL
         User user = (User) SpHelp.getObject(SpHelp.USER_ENTITY);
         params.put("account", user.getAccount());
         params.put("page", page);
-        params.put("limit", 5);
+        params.put("limit", 1);
+        if(request ==1){
         HttpRequest.get(
                 flag ? URLConstant.URL_PUSH_HISTORY : URLConstant.URL_FAVORITE_HISTORY,
                 null, params, new HttpRequest.HttpRequestCallback() {
                     @Override
                     public void onSuccess(JSONObject response) {
+                        request = 1;
                         String error = response.optString("error");
                         if (error.equals("0")) {
                             isEmpty = !response.optJSONObject("data").optBoolean("has_next");
                             JSONArray list = response.optJSONObject("data").optJSONArray("data");
                             itemCount = response.optJSONObject("data").optInt("itemCount");
                             ViseLog.d("itemCount = " + itemCount);
-                            pageCount = (int) Math.ceil(itemCount / 5.0);
+                            pageCount = (int) Math.ceil(itemCount / 1.0);
                             ViseLog.d("pageCount = " + pageCount);
                             if (pageCount == 1) {
                                 tv_1.setVisibility(View.VISIBLE);
@@ -206,6 +257,9 @@ public class PushListActivity extends AppCompatActivity implements View.OnClickL
                                 pushMessage.setCollected(item.optBoolean("favorite") ? 1 : -1);
                                 messageList.add(pushMessage);
                             }
+
+                            Collections.sort(messageList);
+
                             pushAdapter.notifyDataSetChanged();
                         } else {
                             MethodUtils.showToast(getApplicationContext(), response.optString("error_info"));
@@ -214,9 +268,12 @@ public class PushListActivity extends AppCompatActivity implements View.OnClickL
 
                     @Override
                     public void onFailure() {
+                        request = 0;
                         MethodUtils.showToast(getApplicationContext(), "请求失败, 请稍后重试");
                     }
-                });
+                });}
+                else {MethodUtils.showToast(getApplicationContext(), "正在加载中......");}
+
     }
 
 
@@ -245,11 +302,16 @@ public class PushListActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_back:
+
                 if (flag == FLAG_FAVORITE) {
                     initPushHistory();
                 } else {
                     finish();
                 }
+                break;
+            case R.id.center_image:
+                Intent intent = new Intent(getApplicationContext(), UserCenterActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_my_collect:
                 if (flag) {
@@ -259,56 +321,199 @@ public class PushListActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
             case R.id.tv_pre:
-                page--;
-                if (page == 0) {
-                    page = 1;
-                    MethodUtils.showToast(getApplicationContext(), "已到最前页");
-                } else {
-                    getPushMessage(page);
-                }
+                if(request == 1 && !isFastClick()) {
+                    page--;
+                    if (page == 0) {
+                        page = 1;
+                        MethodUtils.showToast(getApplicationContext(), "已到最前页");
+                    } else {
+                        getPushMessage(page);
+                        if (page == 1) {
+                            page_1();
+                        }
+                        if (page == 2) {
+                            page_2();
+                        }
+                        if (page == 3) {
+                            page_3();
+                        }
+                        et_target_page.setText(String.valueOf(page));
+                        tv_pre.setBackgroundResource(R.color.my_blue);
+                        tv_pre.setTextColor(tv_pre.getResources().getColor(R.color.white));
+                        tv_next.setBackgroundResource(R.color.white);
+                        tv_next.setTextColor(tv_next.getResources().getColor(R.color.my_blue));
+                    }
+                }else {MethodUtils.showToast(getApplicationContext(), "正在加载中...请稍等");}
                 break;
 
             case R.id.tv_next:
-                if (!isEmpty) {
+                if(request == 1 && !isFastClick()) {
                     page++;
-                    getPushMessage(page);
-                } else {
-                    MethodUtils.showToast(getApplicationContext(), "已到最后一页");
-                }
+                    if (page > pageCount) {
+                        page = pageCount;
+                        et_target_page.setText(String.valueOf(pageCount));
+                        page_last();
+                        MethodUtils.showToast(getApplicationContext(), "已到最后一页");
+                    } else {
+                        getPushMessage(page);
+                        if (page == 2) {
+                            page_2();
+                        }
+                        if (page == 3) {
+                            page_3();
+                        }
+                        if (page == pageCount) {
+                            page_last();
+                        }
+                        if (page > 3 && page < pageCount) {
+                            page_none();
+                        }
+                        et_target_page.setText(String.valueOf(page));
+                        tv_pre.setBackgroundResource(R.color.white);
+                        tv_pre.setTextColor(tv_pre.getResources().getColor(R.color.my_blue));
+                        tv_next.setBackgroundResource(R.color.my_blue);
+                        tv_next.setTextColor(tv_next.getResources().getColor(R.color.white));
+                    }
+                }else {MethodUtils.showToast(getApplicationContext(), "正在加载中...请稍等");}
                 break;
+
             case R.id.tv_1:
                 if (flag) {
                     initPushHistory();
+                    page = 1;
+                    et_target_page.setText("1");
+                    page_1();
                 } else {
                     initPushFavorite();
+                    page = 1;
+                    et_target_page.setText("1");
+                    page_1();
                 }
                 break;
             case R.id.tv_2:
+                page = 2;
                 getPushMessage(2);
+                et_target_page.setText("2");
+                page_2();
                 break;
             case R.id.tv_3:
+                page = 3;
                 getPushMessage(3);
+                et_target_page.setText("3");
+                page_3();
                 break;
             case R.id.tv_last:
+                page = pageCount;
                 getPushMessage(pageCount);
+                et_target_page.setText(String.valueOf(pageCount));
+                page_last();
                 break;
 
             case R.id.tv_jump:
                 String jumpPager = et_target_page.getText().toString().trim();
                 if (jumpPager.equals("")) {
                     Toast.makeText(this, "页数不能为空", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                else if(!isInteger(jumpPager)){
+                    Toast.makeText(this, "请输入正确页数", Toast.LENGTH_SHORT).show();
+                }
+                else {
                     int pager = Integer.valueOf(jumpPager);
+                    page = pager;
                     if (pager >= 1 && pager <= pageCount) {
                         getPushMessage(pager);
+                        et_target_page.setText(String.valueOf(pager));
+                        if(page == 2){ page_2();}
+                        if(page == 3){ page_3();}
+                        if(page == pageCount){ page_last();}
+                        if(page > 3 && page <pageCount){ page_none();}
                     } else {
-                        Toast.makeText(this, "请输入正确的页数", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "不存在该页，请检查输入", Toast.LENGTH_SHORT).show();
                     }
 
                 }
 
                 break;
         }
+    }
+
+    /**
+     * 判断页码是否为整数
+     */
+    public static boolean isInteger(String str) {
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
+
+    /**
+     * 防止快速点击使页面崩溃
+     */
+    public static boolean isFastClick() {
+        boolean flag = true;
+        long currentClickTime = System.currentTimeMillis();
+        if ((currentClickTime - lastClickTime) >= MIN_DELAY_TIME) {
+            flag = false;
+        }
+        lastClickTime = currentClickTime;
+        return flag;
+    }
+
+    /**
+     * 页面交互
+     */
+    private void page_1(){
+        tv_2.setBackgroundResource(R.color.white);
+        tv_2.setTextColor(tv_2.getResources().getColor(R.color.my_blue));
+        tv_3.setBackgroundResource(R.color.white);
+        tv_3.setTextColor(tv_3.getResources().getColor(R.color.my_blue));
+        tv_last.setBackgroundResource(R.color.white);
+        tv_last.setTextColor(tv_last.getResources().getColor(R.color.my_blue));
+        tv_1.setBackgroundResource(R.color.my_blue);
+        tv_1.setTextColor(tv_1.getResources().getColor(R.color.white));
+    }
+
+    private void page_2(){
+        tv_1.setBackgroundResource(R.color.white);
+        tv_1.setTextColor(tv_1.getResources().getColor(R.color.my_blue));
+        tv_3.setBackgroundResource(R.color.white);
+        tv_3.setTextColor(tv_3.getResources().getColor(R.color.my_blue));
+        tv_last.setBackgroundResource(R.color.white);
+        tv_last.setTextColor(tv_last.getResources().getColor(R.color.my_blue));
+        tv_2.setBackgroundResource(R.color.my_blue);
+        tv_2.setTextColor(tv_2.getResources().getColor(R.color.white));
+    }
+
+    private void page_3(){
+        tv_2.setBackgroundResource(R.color.white);
+        tv_2.setTextColor(tv_2.getResources().getColor(R.color.my_blue));
+        tv_1.setBackgroundResource(R.color.white);
+        tv_1.setTextColor(tv_1.getResources().getColor(R.color.my_blue));
+        tv_last.setBackgroundResource(R.color.white);
+        tv_last.setTextColor(tv_last.getResources().getColor(R.color.my_blue));
+        tv_3.setBackgroundResource(R.color.my_blue);
+        tv_3.setTextColor(tv_3.getResources().getColor(R.color.white));
+    }
+
+    private void page_last(){
+        tv_2.setBackgroundResource(R.color.white);
+        tv_2.setTextColor(tv_2.getResources().getColor(R.color.my_blue));
+        tv_3.setBackgroundResource(R.color.white);
+        tv_3.setTextColor(tv_3.getResources().getColor(R.color.my_blue));
+        tv_1.setBackgroundResource(R.color.white);
+        tv_1.setTextColor(tv_1.getResources().getColor(R.color.my_blue));
+        tv_last.setBackgroundResource(R.color.my_blue);
+        tv_last.setTextColor(tv_last.getResources().getColor(R.color.white));
+    }
+
+    private void page_none(){
+        tv_2.setBackgroundResource(R.color.white);
+        tv_2.setTextColor(tv_2.getResources().getColor(R.color.my_blue));
+        tv_3.setBackgroundResource(R.color.white);
+        tv_3.setTextColor(tv_3.getResources().getColor(R.color.my_blue));
+        tv_1.setBackgroundResource(R.color.white);
+        tv_1.setTextColor(tv_1.getResources().getColor(R.color.my_blue));
+        tv_last.setBackgroundResource(R.color.white);
+        tv_last.setTextColor(tv_last.getResources().getColor(R.color.my_blue));
     }
 
     /**
@@ -345,7 +550,15 @@ public class PushListActivity extends AppCompatActivity implements View.OnClickL
                         JSONObject tem = list.optJSONObject(i);
                         pushMessage.setId(tem.optString("id"));
                         pushMessage.setTitle(tem.optString("title"));
-                        pushMessage.setBrief(tem.optString("brief"));
+
+                        String brief_all = " ";
+                        if(tem.optString("brief").length()<10) {
+                            brief_all = tem.optString("brief").substring(0,tem.optString("brief").length()) + "...查看详情";
+                        }
+                        else{
+                            brief_all = pushMessage.getBrief().substring(0,10) + "...查看详情";
+                        }
+                        pushMessage.setBrief(brief_all);
                         pushMessages.add(pushMessage);
                     }
 
@@ -356,7 +569,7 @@ public class PushListActivity extends AppCompatActivity implements View.OnClickL
                         builder.setContentText(pushMessage.getBrief());
                         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.noti_big));
                         builder.setSmallIcon(R.drawable.noti_small);
-                        builder.setTicker("如医新消息");
+                        builder.setTicker("智能私教");
                         builder.setWhen(System.currentTimeMillis());
                         builder.setAutoCancel(true);
                         builder.setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.ring));

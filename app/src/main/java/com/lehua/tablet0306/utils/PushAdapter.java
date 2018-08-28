@@ -1,6 +1,7 @@
 package com.lehua.tablet0306.utils;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,15 @@ public class PushAdapter extends BaseAdapter {
 
         final PushMessage pushMessage = messageList.get(position);
         viewHolder.tvTitle.setText(pushMessage.getTitle());
-        viewHolder.tvBrief.setText(pushMessage.getBrief());
+
+        String brief_all = " ";
+        if(pushMessage.getBrief().length()<50) {
+            brief_all = pushMessage.getBrief().substring(0,pushMessage.getBrief().length()) + "..." + "<font color='#87CEEB'>查看详情>></font>";
+        }
+        else{
+            brief_all = pushMessage.getBrief().substring(0,50) + "..." + "<font color='#87CEEB'>查看详情>></font>";
+        }
+        viewHolder.tvBrief.setText(Html.fromHtml(brief_all));
         viewHolder.tvDate.setText(pushMessage.getDate());
         if(pushMessage.getCollected() == 1){
             viewHolder.imgCollect.setImageResource(R.drawable.collect2_yes);

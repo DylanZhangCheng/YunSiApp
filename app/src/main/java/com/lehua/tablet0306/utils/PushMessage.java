@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by pendragon on 17-4-17.
  */
 
-public class PushMessage implements Serializable {
+public class PushMessage implements Serializable,Comparable<PushMessage>{
 
 
     private String id;
@@ -73,5 +73,10 @@ public class PushMessage implements Serializable {
         this.brief = brief;
         this.date = date;
         this.photo = photo;
+    }
+
+    @Override
+    public int compareTo(PushMessage p) {
+        return p.date.compareTo(this.date);
     }
 }

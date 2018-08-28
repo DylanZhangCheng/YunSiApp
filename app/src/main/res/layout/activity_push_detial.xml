@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/title_bg"
         android:layout_width="fill_parent"
-        android:layout_height="45dp">
+        android:layout_height="60dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -20,14 +20,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="云思名师  > "
+                android:text="智能私教  > "
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="名师指导 > "
+                android:text="名师辅导 > "
                 android:textColor="@color/my_blue"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -53,9 +53,11 @@
                 android:id="@+id/tv_operate"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="操作"
+                android:text="..."
                 android:textColor="@color/my_blue"
-                android:textSize="18dp" />
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp"/>
         </LinearLayout>
 
     </RelativeLayout>

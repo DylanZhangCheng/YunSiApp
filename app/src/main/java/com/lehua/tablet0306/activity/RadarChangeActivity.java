@@ -16,38 +16,32 @@ import com.lehua.tablet0306.utils.RadarView;
 
 import java.util.ArrayList;
 
-public class RadarActivity extends AppCompatActivity implements View.OnClickListener{
+public class RadarChangeActivity extends AppCompatActivity implements View.OnClickListener{
     TextView rg_back;
     RadarView radar;
+    Button btn_next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_radar);
+        setContentView(R.layout.activity_radar_change);
         getSupportActionBar().hide();
         initView();
         initListener();
         initRadar();
-        Button btn_next = findViewById(R.id.btn_next);
-        btn_next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(RadarActivity.this, LoginActivity.class));
-            }
-        });
     }
 
     private void initView() {
         rg_back = (TextView) findViewById(R.id.rg_back);
-
+        btn_next = findViewById(R.id.btn_next);
 
     }
 
     private void initListener() {
         rg_back.setOnClickListener(this);
-
+        btn_next.setOnClickListener(this);
     }
 
     private void initRadar() {
@@ -84,6 +78,9 @@ public class RadarActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rg_back:
+                finish();
+                break;
+            case R.id.btn_next:
                 finish();
                 break;
             default:

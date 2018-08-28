@@ -59,8 +59,8 @@ public class ProcessAdapter extends ArrayAdapter {
                     }
                     //choose
                     int newChosen = Integer.valueOf(tv.getText().toString());
-                    Drawable bg = getContext().getResources().getDrawable(R.drawable.process_line_chosen);
-                    tv.setBackground(bg);
+                  //  Drawable bg = getContext().getResources().getDrawable(R.drawable.process_line_chosen);
+                    tv.setBackgroundResource(R.color.my_blue);
                     data.set(position, newChosen);
                 }
             });

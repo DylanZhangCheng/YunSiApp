@@ -43,6 +43,7 @@ public class BookAdapter extends ArrayAdapter {
 
         tv_name.setText(getItem(position) + "：");
 
+
         //init data
         data = new ArrayList<>();
         for (int i = 0; i < getCount(); i++) {
@@ -88,4 +89,6 @@ public class BookAdapter extends ArrayAdapter {
     public List<String> getBook() {
         return data;
     }
+
+
 }

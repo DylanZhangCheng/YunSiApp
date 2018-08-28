@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -27,6 +28,7 @@ import com.lehua.tablet0306.okhttp.URLConstant;
 import com.lehua.tablet0306.utils.MethodUtils;
 import com.lehua.tablet0306.utils.PushMessage;
 import com.lehua.tablet0306.utils.SpHelp;
+import com.mob.MobSDK;
 import com.vise.log.ViseLog;
 
 import org.json.JSONException;
@@ -34,6 +36,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import cn.sharesdk.onekeyshare.OnekeyShare;
 
 public class PushDetailActivity extends AppCompatActivity {
 
@@ -52,6 +56,7 @@ public class PushDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_push_detial);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -147,6 +152,7 @@ public class PushDetailActivity extends AppCompatActivity {
                 HttpRequest.get(URLConstant.URL_FAVORITE, null, parmas, new HttpRequest.HttpRequestCallback() {
                     @Override
                     public void onSuccess(JSONObject response) {
+                        ViseLog.d(response);
                         if (response.optString("error").equals("0")) {
                             if (pushMessage.getCollected() == -1) {
                                 pushMessage.setCollected(1);
@@ -180,7 +186,14 @@ public class PushDetailActivity extends AppCompatActivity {
             }
         });
 
-        
+
+        MobSDK.init(this);
+        ll_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showShare();
+            }
+        });
     }
 
     private void initData() {
@@ -259,6 +272,20 @@ public class PushDetailActivity extends AppCompatActivity {
                 }).create();
 
         deleteDialog.show();
+    }
+
+    private void showShare() {
+        OnekeyShare oks = new OnekeyShare();
+        //关闭sso授权
+        oks.disableSSOWhenAuthorize();
+
+        oks.setTitle("hhhhhhhhh");
+
+        oks.setTitleUrl("http://baidu.com");
+
+        oks.setText("智能私教");
+
+        oks.show(this);
     }
 
 

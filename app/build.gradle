@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.mob.sdk'
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
@@ -14,9 +14,15 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+
+            aaptOptions.cruncherEnabled = false
+            aaptOptions.useNewCruncher = false
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
 }
 
 dependencies {
@@ -29,4 +35,30 @@ dependencies {
     compile 'com.vise.xiaoyaoyou:viselog:1.0.0'
     testCompile 'junit:junit:4.12'
     compile files('libs/volley.jar')
+}
+
+MobSDK {
+    appKey "278eb528fab48"
+    appSecret "a3b6eb1c86b27b7fa2b77dfb2ca0878a"
+
+    ShareSDK {
+        devInfo {
+            SinaWeibo {
+                appKey "1518631076"
+                appSecret "7e2a9e98b11aa7413aa6176c0f404d67"
+                callbackUri "http://www.sharesdk.cn"
+                shareByAppClient false
+            }
+            Wechat {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+            }
+            QQ {
+                appId "1107721787"
+                appKey "m0CUIgpTK5KptXV3"
+                shareByAppClient true
+            }
+
+        }
+    }
 }
